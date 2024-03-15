@@ -1,0 +1,16 @@
+version: '3.8'  # Specify the Docker Compose file version
+
+services:
+  db:
+    image: postgres:latest  # Use the official PostgreSQL image
+    restart: always  # Ensure the container restarts if it crashes
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}  # Consider loading from a .env file
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist data with colon (:)
+    ports:
+      - "5233:5432"  # Expose port 5233 on localhost and map it to PostgreSQL default port 5432
+
+volumes:
+  postgres_data:
