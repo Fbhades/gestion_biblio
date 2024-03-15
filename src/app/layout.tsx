@@ -8,15 +8,9 @@ import "@/app/globals.css"
 const inter = Inter({ subsets: ["latin"] });
 
 const handleCreateUser = async () => {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const email =user?.emailAddresses.toString();
-  const name =user?.fullName?.toString();
-  console.log(email,name,user);
   try {
     const response = await fetch('/api/auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name }),
     });
 
     if (!response.ok) {
