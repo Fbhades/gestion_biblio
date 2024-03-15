@@ -1,12 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
-import pool from "../../../../db"; // Assuming the correct path to your database connection pool
+import pool from "../../../../db"; 
 
 export const GET = async (req: NextRequest) => {
   try {
     const client = await pool.connect();
     try {
       const result = await client.query('SELECT * FROM users');
-      const users = result.rows; // Store the fetched data as "users"
+      const users = result.rows; 
       console.log("Fetched users:", users);
       return NextResponse.json(users, { status: 200 });
     } finally {
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Corrected table and column names
-      await client.query('INSERT INTO users (email, name, role) VALUES ($1, $2, $3)', [email, name, "etudiant"]);
+      await client.query('INSERT INTO users (email, username, role) VALUES ($1, $2, $3)', [email, name, "etudiant"]);
       return NextResponse.json({ message: "User added successfully" }, { status: 201 });
     } finally {
       await client.release();
