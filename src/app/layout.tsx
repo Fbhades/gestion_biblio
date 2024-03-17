@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import { auth } from "@clerk/nextjs/server";
 import "@/app/globals.css"
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 const handleCreateUser = async () => {
