@@ -77,7 +77,7 @@ export default function Home() {
           </section>
   
           {/* À propos Section */}
-          <section id="a-propos" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8"> {/* Increased padding-y */}
+          <section id="a-propos" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8 "> {/* Increased padding-y */}
             <div className="max-w-screen-full mx-auto text-center">
               <h1 className="text-3xl font-bold text-black dark:text-white mb-4">À propos</h1>
               <p className="text-lg text-gray-800 dark:text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut lectus vitae magna luctus blandit. Nullam pulvinar dui sed interdum sagittis.</p>
@@ -85,7 +85,7 @@ export default function Home() {
           </section>
   
           {/* Nos services Section */}
-          <section id="nos-services" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8">
+          <section id="nos-services" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8 ">
             <div className="max-w-screen-full mx-auto text-center">
               <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Nos services</h1>
               <div className="flex justify-center space-x-8">

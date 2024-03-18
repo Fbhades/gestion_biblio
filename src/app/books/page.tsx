@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 // Navbar component
-function Navbar() {
+function Navbar({ searchTerm, setSearchTerm }) {
   return (
     <nav className="bg-blue-200 dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 h-24"> {/* Increased height */}
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
@@ -35,7 +35,12 @@ function Navbar() {
         </div>
         <div className="relative h-full mt-2"> 
           <FontAwesomeIcon icon={faSearch} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 pointer-events-none" /> {/* Search icon */}
-          <input type="text" placeholder="Search..." className="pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 h-full bg-white dark:bg-gray-800" />
+          <input type="text" 
+          placeholder="Search..." 
+          className="pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 h-full bg-white dark:bg-gray-800" 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} // Update search term state on input change
+          />
         </div>
         
       </div>
@@ -45,8 +50,9 @@ function Navbar() {
 
 
 // Books component
-function Books() {
+function Books({ searchTerm }) { // Receive searchTerm as prop
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,11 +64,19 @@ function Books() {
     fetchData();
   }, []);
 
+  // Filter books based on search term
+  useEffect(() => {
+    const filteredBooks = data.filter((book) => 
+      book.label.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredData(filteredBooks);
+  }, [searchTerm, data]);
+
   return (
     <div className="container mx-auto mt-32 px-4"> {/* Adjust margin-top to move below the navbar */}
       <div className="flex flex-wrap -mx-4">
-        {data?.length > 0 ? (
-          data.map((book) => (
+        {filteredData?.length > 0 ? (
+          filteredData.map((book) => (
             <a href="#" className="block px-4 mb-4 w-1/3" key={book.id}>
               <div className="bg-white shadow-lg rounded-lg overflow-hidden">
                 <img
@@ -86,10 +100,12 @@ function Books() {
 }
 
 export default function Home() {
+  const [searchTerm, setSearchTerm] = useState(""); // Define searchTerm state in Home component
+
   return (
     <div>
-      <Navbar />
-      <Books />
+      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> {/* Pass searchTerm and setSearchTerm as props */}
+      <Books searchTerm={searchTerm} /> {/* Pass searchTerm as prop */}
     </div>
   );
 }
