@@ -37,7 +37,7 @@ export default function Home() {
         <nav className="bg-blue-200 dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 h-24"> {/* Increased height */}
           <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
             <div className="flex items-center space-x-20 rtl:space-x-reverse">
-              <a href="https://www.facebook.com/isetrades2018" className="flex items-center space-x-3 rtl:space-x-reverse">
+              <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                 <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">ISET RADES</span>
               </a>
               <ul className="flex flex-row items-center space-x-10">
