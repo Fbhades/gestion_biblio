@@ -4,10 +4,10 @@ import { UserButton, useAuth } from "@clerk/nextjs";
 
 interface NavbarProps {
     searchTerm: string; 
-    setSearchTerm: (value: string) => void;
+    setSearchTerm : (value: string) => void;
   }
   
-export default function Navbar({ searchTerm, setSearchTerm }: NavbarProps) {
+export default function Navbar({ searchTerm, setSearchTerm  }: NavbarProps) {
     const { isLoaded, userId, sessionId, getToken } = useAuth();
     return (
       <nav className="bg-blue-200 dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 h-24"> {/* Increased height */}
