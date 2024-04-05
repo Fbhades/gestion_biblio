@@ -13,7 +13,6 @@ export default function Home() {
   const handleCreateUser = async () => {
     try {
       const { isLoaded, isSignedIn, user } = useUser();
-      console.log(user);
       const email = user?.emailAddresses[0].toString();
       const name = user?.fullName?.toString();
       const response = await fetch('http://localhost:3000/api/auth', {
