@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Ui/Navbar";
 import SearchBar from "@/components/searchBar";
-
+import Link from "next/link";
 interface Book {
   id: number;
   label: string;
@@ -61,9 +61,12 @@ export default function Books() {
 
           filteredData.length > 0 ? (
             <>
+           
+
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4">
-                {filteredData.map((book) => (
-                  <a href="#" className=" " key={book.id}>
+                {
+                filteredData.map((book) => (
+                    <Link href={{pathname: '../page_detail',query: book }}>
                     <div className="bg-white shadow-lg rounded-lg overflow-hidden h-full">
                       <img
                         alt=""
@@ -77,9 +80,11 @@ export default function Books() {
                         <p className="mt-2 max-w-sm text-gray-700">{book.author}</p>
                       </div>
                     </div>
-                  </a>
-                ))}
+                    </Link>
+                ))
+                }
               </div>
+              
             </>
           ) : (
             <p>No books found.</p>

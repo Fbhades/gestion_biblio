@@ -37,10 +37,11 @@ export default function Home() {
     <div>
       <Navbar />
 
-      <div className="pt-24">
+      <div className="pt-0">
         {/* acceuil Section */}
         <section id="accueil" style={{
-          backgroundImage: "url('https://www.travelandleisure.com/thmb/iq3jvCzmNJY8KnsfCrj76xoQbu0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/johns-hopkins-university-george-peabody-library-COLLEGELIB0417-e09f301ad9ce42fbb924f269469d59a8.jpg?fbclid=IwAR2FFv7WJNMlCXxEYCVHBcYYMBFl77sltUAdf9MNu1fCJVJh3L1BxdtKhQc')"
+          // backgroundImage: "url('https://www.travelandleisure.com/thmb/iq3jvCzmNJY8KnsfCrj76xoQbu0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/johns-hopkins-university-george-peabody-library-COLLEGELIB0417-e09f301ad9ce42fbb924f269469d59a8.jpg?fbclid=IwAR2FFv7WJNMlCXxEYCVHBcYYMBFl77sltUAdf9MNu1fCJVJh3L1BxdtKhQc')"
+          backgroundImage :"url('bg-image.jpg')"
           , backgroundSize: "cover", backgroundPosition: "center", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center"
         }}>
           <h1 className="text-5xl text-white font-bold mb-8">A place to learn, grow, and explore</h1>
