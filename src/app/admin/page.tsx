@@ -1,11 +1,11 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 
 interface Book {
-  id:number;
+  id_book:number;
   label: string;
   author: string;
   slug: string;
@@ -14,19 +14,17 @@ interface Book {
 }
 
 export default function Admin() {
-  
+   const router = useRouter();
   const { isLoaded, isSignedIn, user } = useUser();
   const [books, setBooks] = useState<Book[]>([]);
   const email = user?.emailAddresses[0].toString();
-  console.log("email is", email, user);
-  const [newBook, setNewBook] = useState<Book>({ id:0,label: "", author: "" ,slug:"",isbn:0,description:"yyy"});
+  const [newBook, setNewBook] = useState<Book>({ id_book:0,label: "", author: "" ,slug:"",isbn:0,description:"yyy"});
   useEffect(() => {
     const fetchData = async () => {
-        const router = useRouter();
       const response = await fetch(`http://localhost:3000/api/auth/${email}`);
       const jsonData = await response.json();
-      console.log(jsonData);
-      if (jsonData[0].role === "etudiant") {
+      console.log(jsonData[0].role);
+      if (jsonData[0].role != "admin") {
         router.push("/");
       }
     };
@@ -44,10 +42,10 @@ export default function Admin() {
   const addBook = async () => {
     try {
       const { label, author, isbn, description } = newBook;
-      const slug = label.toLowerCase().replace(/\s+/g, '-'); // Generate slug from label
+      const slug = label.toLowerCase().replace(/\s+/g, '-'); 
       
       console.log(label, "auth" ,author, isbn,"desc", description,"slug is",slug)
-      const response = await fetch('http://localhost:3000/api/auth', {
+      const response = await fetch('http://localhost:3000/api/books', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ label, author, isbn, description ,slug }),
@@ -57,7 +55,7 @@ export default function Admin() {
       }
       const updatedBooks = await response.json();
       setBooks(updatedBooks as Book[]);
-      setNewBook({ id:0,label: "", author: "" ,slug:"",isbn:0,description:""});
+      setNewBook({ id_book:0,label: "", author: "" ,slug:"",isbn:0,description:""});
     } catch (error) {
       console.error("Error adding book:", error);
       // Handle error appropriately, e.g., show error message to the user
@@ -70,7 +68,6 @@ export default function Admin() {
   };
 
   const updateBook = async (id: any, book: any) => {
-    const router = useRouter();
     await axios.put(`/api/books/${id}`, book);
     router.push("/admin");
   };
@@ -113,13 +110,13 @@ export default function Admin() {
             <p className="text-gray-600">{book.author}</p>
             <div className="flex justify-end mt-4">
               <button
-                onClick={() => updateBook(book.id, { ...book, label: "Updated Label" })}
+                onClick={() => updateBook(book.id_book, { ...book, label: "Updated Label" })}
                 className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
               >
                 Update
               </button>
               <button
-                onClick={() => deleteBook(book.id)}
+                onClick={() => deleteBook(book.id_book)}
                 className="bg-red-500 text-white px-4 py-2 rounded-md"
               >
                 Delete

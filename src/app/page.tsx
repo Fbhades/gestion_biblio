@@ -14,7 +14,7 @@ export default function Home() {
     try {
       const { isLoaded, isSignedIn, user } = useUser();
       const email = user?.emailAddresses[0].toString();
-      const name = user?.fullName?.toString();
+      const name = user?.username?.toString();
       const response = await fetch('http://localhost:3000/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
