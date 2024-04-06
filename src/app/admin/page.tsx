@@ -20,13 +20,12 @@ export default function Admin() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [books, setBooks] = useState<Book[]>([]);
   const email = user?.emailAddresses[0].toString();
-  const [newBook, setNewBook] = useState<Book>({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "yyy", category: 1, image: "https://via.placeholder.com/150" });
+  const [newBook, setNewBook] = useState<Book>({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "", category: 1, image: "https://via.placeholder.com/150" });
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`http://localhost:3000/api/auth/${email}`);
       const jsonData = await response.json();
-      console.log(jsonData[0].role);
-      if (jsonData[0].role != "admin") {
+      if (jsonData.length > 0 && jsonData[0].role !== "admin") {
         router.push("/");
       }
     };
@@ -43,24 +42,21 @@ export default function Admin() {
 
   const addBook = async () => {
     try {
-      const { label, author, isbn, description } = newBook;
+      const { label, author, isbn, description, category, image } = newBook;
       const slug = label.toLowerCase().replace(/\s+/g, '-');
 
-      console.log(label, "auth", author, isbn, "desc", description, "slug is", slug)
       const response = await fetch('http://localhost:3000/api/books', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label, slug, isbn, description, author, category: 1, image: "https://via.placeholder.com/150" }),
+        body: JSON.stringify({ label, slug, isbn, description, author, category, image }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch books after adding.");
       }
-      // const updatedBooks = await response.json();
       setBooks([newBook, ...books]);
       setNewBook({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "", category: 1, image: "https://via.placeholder.com/150" });
     } catch (error) {
       console.error("Error adding book:", error);
-      // Handle error appropriately, e.g., show error message to the user
     }
   };
 
@@ -92,9 +88,29 @@ export default function Admin() {
         />
         <input
           type="text"
+          placeholder="Image URL"
+          className="border border-gray-300 rounded-md px-4 py-2 mb-2"
+          name="image"
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
           placeholder="Author"
           className="border border-gray-300 rounded-md px-4 py-2 mb-2"
           name="author"
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          placeholder="ISBN"
+          className="border border-gray-300 rounded-md px-4 py-2 mb-2"
+          name="isbn"
+          onChange={handleInputChange}
+        />
+        <input
+          placeholder="Description"
+          className="border border-gray-300 rounded-md px-4 py-2 mb-2"
+          name="description"
           onChange={handleInputChange}
         />
         <button
@@ -107,13 +123,13 @@ export default function Admin() {
       </form>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {books.map((book) => (
-          <div className="bg-white p-4 shadow-md rounded-md">
-            <img src={book.image} alt={book.label} className="w-full h-auto" />
+          <div className="bg-white p-4 shadow-md rounded-md ">
+            <img src={book.image} alt={book.label} className="w-full h-64" />
             <h2 className="text-xl font-semibold mt-2">{book.label}</h2>
             <p className="text-gray-600">{book.author}</p>
             <div className="flex justify-end mt-4">
               <button
-                onClick={() => updateBook(book.id_book, { ...book, label: "Updated Label" })}
+                // onClick={() => updateBook(book.id_book, { ...book, label: "Updated Label" })}
                 className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
               >
                 Update

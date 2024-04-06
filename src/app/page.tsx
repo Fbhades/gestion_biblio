@@ -4,33 +4,33 @@ import { useAuth } from "@clerk/nextjs";
 import { FaSearch } from 'react-icons/fa';
 import { UserButton } from "@clerk/clerk-react";
 import Navbar from "./Ui/Navbar";
-
+import { handleCreateUser } from "@/components/user";
 
 
 export default function Home() {
   //
   const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const handleCreateUser = async () => {
-    try {
-      const { isLoaded, isSignedIn, user } = useUser();
-      const email = user?.emailAddresses[0].toString();
-      const name = user?.username?.toString();
-      const response = await fetch('http://localhost:3000/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
-      });
+  // const handleCreateUser = async () => {
+  //   try {
+  //     const { isLoaded, isSignedIn, user } = useUser();
+  //     const email = user?.emailAddresses[0].toString();
+  //     const name = user?.username?.toString();
+  //     const response = await fetch('http://localhost:3000/api/auth', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email, name }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to create user');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to create user');
+  //     }
 
-      const data = await response.json();
-      console.log('User created:', data);
-    } catch (error) {
-      console.error('Error creating user:', error);
-    }
-  };
+  //     const data = await response.json();
+  //     console.log('User created:', data);
+  //   } catch (error) {
+  //     console.error('Error creating user:', error);
+  //   }
+  // };
   if (userId) { handleCreateUser() }
   return (
     <div>
@@ -40,7 +40,7 @@ export default function Home() {
         {/* acceuil Section */}
         <section id="accueil" style={{
           // backgroundImage: "url('https://www.travelandleisure.com/thmb/iq3jvCzmNJY8KnsfCrj76xoQbu0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/johns-hopkins-university-george-peabody-library-COLLEGELIB0417-e09f301ad9ce42fbb924f269469d59a8.jpg?fbclid=IwAR2FFv7WJNMlCXxEYCVHBcYYMBFl77sltUAdf9MNu1fCJVJh3L1BxdtKhQc')"
-          backgroundImage :"url('bg-image.jpg')"
+          backgroundImage: "url('bg-image.jpg')"
           , backgroundSize: "cover", backgroundPosition: "center", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center"
         }}>
           <h1 className="text-5xl text-white font-bold mb-8">A place to learn, grow, and explore</h1>
