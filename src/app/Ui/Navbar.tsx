@@ -4,7 +4,7 @@ import { UserButton, useAuth } from "@clerk/nextjs";
 export default function Navbar() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   return (
-    <nav className="bg-blue-200 dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 h-24"> {/* Increased height */}
+    <nav className="bg-blue-400 dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 h-13"> {/* Increased height */}
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
         <div className="flex items-center space-x-20 rtl:space-x-reverse">
           <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">

@@ -54,14 +54,14 @@ export async function POST(req: NextRequest) {
     try {
 
       const body = await req.json();
-      const { label, slug, isbn, description, author, category } = body;
+      const { label, slug, isbn, description, author, category, image } = body;
 
       // Input validation
-      if (!label || !slug || !isbn || !description || !author || !category) {
+      if (!label || !slug || !isbn || !description || !author || !category || !image) {
         return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
       }
 
-      await client.query('INSERT INTO books (label, slug, isbn, description, author, category) VALUES($1,$2,$3,$4,$5,$6); ', [label, slug, isbn, description, author, category]);
+      await client.query('INSERT INTO books (label, slug, isbn, description, author, category, image) VALUES($1,$2,$3,$4,$5,$6,$7); ', [label, slug, isbn, description, author, category, image]);
       return NextResponse.json({ message: "Book added" }, { status: 201 });
     }
     catch (error) {

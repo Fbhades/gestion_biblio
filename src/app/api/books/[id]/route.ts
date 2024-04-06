@@ -36,12 +36,12 @@ export async function PUT(req: NextRequest, context: any) {
         return NextResponse.json({ message: "Missing 'id' parameter" }, { status: 400 });
       }
       const body = await req.json();
-      const { label, slug, isbn, description, author, category } = body;
+      const { label, slug, isbn, description, author, category, image } = body;
       // Input validation
-      if (!label || !slug || !isbn || !description || !author || !category) {
+      if (!label || !slug || !isbn || !description || !author || !category || !image) {
         return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
       }
-      const result = await client.query('UPDATE books SET label = $1, slug = $2, isbn = $3, description = $4, author = $5, category= $7 WHERE id_book = $6 ', [label, slug, isbn, description, author, id, category]);
+      const result = await client.query('UPDATE books SET label = $1, slug = $2, isbn = $3, description = $4, author = $5, category= $7, image = $8 WHERE id_book = $6 ', [label, slug, isbn, description, author, id, category, image]);
       if (result.rowCount === 0) {
         return NextResponse.json({ message: "Book not found" }, { status: 404 });
       }

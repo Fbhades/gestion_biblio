@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Ui/Navbar";
 import SearchBar from "@/components/searchBar";
-
+import Loading from "@/components/loading"
+import { useRouter } from "next/navigation";
 interface Book {
-  id: number;
+  id_book: number;
   label: string;
   author: string;
   image: string;
@@ -15,6 +16,7 @@ export default function Books() {
   const [data, setData] = useState<Book[]>([]);
   const [filteredData, setFilteredData] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true); // Add loading state
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,22 +53,21 @@ export default function Books() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center  h-screen">
-            <div className="relative w-32 h-32">
-              <div className="animate-spin rounded-full h-full w-full border-t-2 border-b-2 border-blue-300 absolute"></div>
-              <span className="absolute inset-0 flex items-center justify-center text-lg text-blue-300 font-bold">Loading</span>
-            </div>
-          </div>
+          <Loading />
         ) :
 
           filteredData.length > 0 ? (
             <>
+
+
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4">
-                {filteredData.map((book) => (
-                  <a href="#" className=" " key={book.id}>
-                    <div className="bg-white shadow-lg rounded-lg overflow-hidden h-full">
+                {
+                  filteredData.map((book) => (
+
+                    // <Link href={{ pathname: '../page_detail', query: book }}>
+                    <div className="bg-white shadow-lg rounded-lg overflow-hidden h-full" onClick={() => router.push('/books/' + book.id_book)} role="button">
                       <img
-                        alt=""
+                        alt={book.label}
                         src={book.image}
                         className="h-64 w-full object-cover"
                       />
@@ -77,14 +78,16 @@ export default function Books() {
                         <p className="mt-2 max-w-sm text-gray-700">{book.author}</p>
                       </div>
                     </div>
-                  </a>
-                ))}
+                    // </Link>
+                  ))
+                }
               </div>
+
             </>
           ) : (
             <p>No books found.</p>
           )}
-      </div>
+      </div >
     </>
   );
 }
