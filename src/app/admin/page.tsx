@@ -5,20 +5,22 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 interface Book {
-  id_book:number;
+  id_book: number;
   label: string;
   author: string;
   slug: string;
   isbn: number;
   description: string;
+  image?: string;
+  category: number;
 }
 
 export default function Admin() {
-   const router = useRouter();
+  const router = useRouter();
   const { isLoaded, isSignedIn, user } = useUser();
   const [books, setBooks] = useState<Book[]>([]);
   const email = user?.emailAddresses[0].toString();
-  const [newBook, setNewBook] = useState<Book>({ id_book:0,label: "", author: "" ,slug:"",isbn:0,description:"yyy"});
+  const [newBook, setNewBook] = useState<Book>({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "yyy", category: 1, image: "https://via.placeholder.com/150" });
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`http://localhost:3000/api/auth/${email}`);
@@ -37,25 +39,25 @@ export default function Admin() {
 
     fetchData();
     fetchBooks();
-  }, [email]);
-  
+  }, [email, newBook]);
+
   const addBook = async () => {
     try {
       const { label, author, isbn, description } = newBook;
-      const slug = label.toLowerCase().replace(/\s+/g, '-'); 
-      
-      console.log(label, "auth" ,author, isbn,"desc", description,"slug is",slug)
+      const slug = label.toLowerCase().replace(/\s+/g, '-');
+
+      console.log(label, "auth", author, isbn, "desc", description, "slug is", slug)
       const response = await fetch('http://localhost:3000/api/books', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label, author, isbn, description ,slug }),
+        body: JSON.stringify({ label, slug, isbn, description, author, category: 1, image: "https://via.placeholder.com/150" }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch books after adding.");
       }
-      const updatedBooks = await response.json();
-      setBooks(updatedBooks as Book[]);
-      setNewBook({ id_book:0,label: "", author: "" ,slug:"",isbn:0,description:""});
+      // const updatedBooks = await response.json();
+      setBooks([newBook, ...books]);
+      setNewBook({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "", category: 1, image: "https://via.placeholder.com/150" });
     } catch (error) {
       console.error("Error adding book:", error);
       // Handle error appropriately, e.g., show error message to the user
@@ -74,6 +76,7 @@ export default function Admin() {
 
   const deleteBook = async (id: any) => {
     await axios.delete(`/api/books/${id}`);
+    setBooks(books.filter((book) => book.id_book !== id));
   };
 
   return (
@@ -105,7 +108,7 @@ export default function Admin() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {books.map((book) => (
           <div className="bg-white p-4 shadow-md rounded-md">
-            <img src="" alt={book.label} className="w-full h-auto" />
+            <img src={book.image} alt={book.label} className="w-full h-auto" />
             <h2 className="text-xl font-semibold mt-2">{book.label}</h2>
             <p className="text-gray-600">{book.author}</p>
             <div className="flex justify-end mt-4">

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import Navbar from "../Ui/Navbar";
 import SearchBar from "@/components/searchBar";
 import Loading from "@/components/loading"
@@ -24,10 +24,14 @@ export default function Books() {
       const jsonData = await response.json();
       setData(jsonData as Book[]);
       setLoading(false); // Set loading to false when data is received
+      // Set filteredData to jsonData as Book[]
+      setFilteredData(jsonData as Book[]);
     };
-
     fetchData();
 
+
+  }, []);
+  useEffect(() => {
     const updateFilteredData = () => {
       if (searchTerm) {
         const filteredBooks = data.filter((book) =>
@@ -40,7 +44,7 @@ export default function Books() {
     };
 
     updateFilteredData();
-  }, [searchTerm, data]);
+  }, [searchTerm]);
 
 
 

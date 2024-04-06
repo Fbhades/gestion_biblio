@@ -56,17 +56,17 @@ export async function POST(req: NextRequest) {
       const body = await req.json();
       const { label, slug, isbn, description, author, category, image } = body;
 
-      // Input validation
-      if (!label || !slug || !isbn || !description || !author || !category || !image) {
-        return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
-      }
+      // // Input validation
+      // if (!label || !slug || !isbn || !description || !author || !category || !image) {
+      //   return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+      // }
 
       await client.query('INSERT INTO books (label, slug, isbn, description, author, category, image) VALUES($1,$2,$3,$4,$5,$6,$7); ', [label, slug, isbn, description, author, category, image]);
       return NextResponse.json({ message: "Book added" }, { status: 201 });
     }
     catch (error) {
       console.error('Error fetching data:', error);
-      return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+      return NextResponse.json({ error, message: "Internal server error" }, { status: 500 });
     } finally {
       await client.release();
     }

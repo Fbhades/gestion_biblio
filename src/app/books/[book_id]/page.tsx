@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "../../Ui/Navbar";
 import Loading from "@/components/loading"
+import { useUser } from "@clerk/nextjs";
 
 interface Book {
     label: string;
@@ -10,6 +11,7 @@ interface Book {
     image: string;
     description: string;
 }
+
 
 // Rest of the code...
 
@@ -19,14 +21,27 @@ export default function PageDetails() {
     const [book, setBook] = useState(undefined as Book | undefined);
     const [review, setReview] = useState("");
     const [loading, setLoading] = useState(true); // Add loading state
-
+    const { user } = useUser();
+    const email = user?.emailAddresses[0].toString();
+    const [userID, setUserID] = useState(0);
     useEffect(() => {
 
         if (book_id) {
             fetchBookData();
             setLoading(false);
         }
-    }, [book_id]);
+        const fetchData = async () => {
+            const response = await fetch(`http://localhost:3000/api/auth/${email}`);
+            const jsonData = await response.json();
+            console.log(jsonData[0].role);
+            console.log(jsonData)
+            setUserID(jsonData[0].id_user);
+
+        };
+        fetchData();
+
+
+    }, [book_id, email]);
 
     const fetchBookData = async () => {
         try {
@@ -48,6 +63,23 @@ export default function PageDetails() {
         setReview("");
     };
 
+    const reserveBook = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/books/${book_id}/reserver`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id_user: userID, id_book: book_id }),
+            });
+            const data = await response.json();
+            console.log("Book reservation response:", data);
+            // Handle the response as needed
+        } catch (error) {
+            console.error("Error reserving book:", error);
+            // Handle the error as needed
+        }
+    };
     return (
         <>
             <Navbar />
@@ -72,7 +104,7 @@ export default function PageDetails() {
                         ) : (
                             <p>Loading...</p>
                         )}
-                        <button className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
+                        <button onClick={() => reserveBook()} className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
                             Reserver
                         </button>
                     </div>
@@ -99,7 +131,8 @@ export default function PageDetails() {
                             </button>
                         </div>
                     </div>
-                </div >)}
+                </div >)
+            }
         </>
     );
 }
