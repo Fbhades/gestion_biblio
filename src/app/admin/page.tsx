@@ -14,13 +14,26 @@ interface Book {
   image?: string;
   category: number;
 }
+interface Category {
+  id_cat: number;
+  label: string;
+}
+interface Sous_Category {
+  id_sous_cat: number;
+  label: string;
+  parent_cat: number;
+}
 
 export default function Admin() {
   const router = useRouter();
   const { isLoaded, isSignedIn, user } = useUser();
   const [books, setBooks] = useState<Book[]>([]);
   const email = user?.emailAddresses[0].toString();
-  const [newBook, setNewBook] = useState<Book>({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "", category: 1, image: "https://via.placeholder.com/150" });
+  const [newBook, setNewBook] = useState<Book>({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "", category: -1, image: "" });
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [sousCategories, setSousCategories] = useState<Sous_Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number>(-1);
+  const [nbrCopies, setNbrCopies] = useState<number>(1);
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`http://localhost:3000/api/auth/${email}`);
@@ -39,6 +52,24 @@ export default function Admin() {
     fetchData();
     fetchBooks();
   }, [email, newBook]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await fetch(`http://localhost:3000/api/categories`);
+      const categories = await response.json();
+      setCategories(categories);
+    }
+    fetchCategories();
+
+  }, []);
+  useEffect(() => {
+    const fetchSousCategories = async () => {
+      const response = await fetch(`http://localhost:3000/api/categories/${selectedCategory}/sousCategories`);
+      const sousCategories = await response.json();
+      setSousCategories(sousCategories);
+    }
+    fetchSousCategories();
+
+  }, [selectedCategory]);
 
   const addBook = async () => {
     try {
@@ -48,19 +79,21 @@ export default function Admin() {
       const response = await fetch('http://localhost:3000/api/books', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ label, slug, isbn, description, author, category, image }),
+        body: JSON.stringify({ label, slug, isbn, description, author, category, image, nbrCopies }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch books after adding.");
       }
       setBooks([newBook, ...books]);
-      setNewBook({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "", category: 1, image: "https://via.placeholder.com/150" });
+      setNewBook({ id_book: 0, label: "", author: "", slug: "", isbn: 0, description: "", category: -1, image: "" });
+      setNbrCopies(1);
+      setSelectedCategory(-1);
     } catch (error) {
       console.error("Error adding book:", error);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewBook({ ...newBook, [name]: value });
   };
@@ -78,49 +111,108 @@ export default function Admin() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Admin Panel</h1>
-      <form className="mb-8">
+      <form className="mb-8" onChange={handleInputChange}>
         <input
           type="text"
           placeholder="Label"
           className="border border-gray-300 rounded-md px-4 py-2 mb-2"
           name="label"
-          onChange={handleInputChange}
+          required
+          value={newBook.label}
         />
         <input
           type="text"
           placeholder="Image URL"
           className="border border-gray-300 rounded-md px-4 py-2 mb-2"
           name="image"
-          onChange={handleInputChange}
+          required
+          value={newBook.image}
         />
         <input
           type="text"
           placeholder="Author"
           className="border border-gray-300 rounded-md px-4 py-2 mb-2"
           name="author"
-          onChange={handleInputChange}
+          required
+          value={newBook.author}
         />
         <input
           type="text"
           placeholder="ISBN"
           className="border border-gray-300 rounded-md px-4 py-2 mb-2"
           name="isbn"
-          onChange={handleInputChange}
+          required
+          value={newBook.isbn}
         />
         <input
           placeholder="Description"
           className="border border-gray-300 rounded-md px-4 py-2 mb-2"
           name="description"
-          onChange={handleInputChange}
+          required
+          value={newBook.description}
         />
+        <input
+          placeholder="Number of copies"
+          className="border border-gray-300 rounded-md px-4 py-2 mb-2"
+          name="nbrCopies"
+          required
+          onChange={(e) => setNbrCopies(parseInt(e.target.value))}
+          value={nbrCopies}
+          type="number"
+          min="1"
+        />
+        <select
+          className="border border-gray-300 rounded-md px-4 py-2 mb-2"
+          name="big_category"
+          required
+          onChange={(e) => setSelectedCategory(parseInt(e.target.value))}
+          value={selectedCategory}
+        >
+          <option disabled selected key={-1} value={-1}>
+            Select category
+          </option>
+          {categories.map((category) => (
+            <option key={category.id_cat} value={category.id_cat}>
+              {category.label}
+            </option>
+          ))}
+        </select>
+        {sousCategories && Array.isArray(sousCategories) && sousCategories.length > 0 && (
+          <select
+            className="border border-gray-300 rounded-md px-4 py-2 mb-2"
+            name="category"
+            required value={newBook.category}
+          >
+            <option disabled selected key={-1} value={-1}>
+              Select sub-category
+            </option>
+            {sousCategories.map((sousCategory) => (
+              <option key={sousCategory.id_sous_cat} value={sousCategory.id_sous_cat}>
+                {sousCategory.label}
+              </option>
+            ))}
+          </select>
+        )}
         <button
           type="button"
           onClick={addBook}
           className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+          disabled={
+            !newBook.label ||
+            !newBook.image ||
+            !newBook.author ||
+            !newBook.isbn ||
+            !newBook.description ||
+            !newBook.category ||
+            newBook.category === -1 ||
+            !nbrCopies ||
+            nbrCopies < 1
+          }
         >
           Add Book
         </button>
       </form>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {books.map((book) => (
           <div className="bg-white p-4 shadow-md rounded-md ">

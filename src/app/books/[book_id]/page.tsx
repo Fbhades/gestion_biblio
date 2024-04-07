@@ -65,12 +65,14 @@ export default function PageDetails() {
 
     const reserveBook = async () => {
         try {
+            const returnDate = new Date();
+            returnDate.setDate(returnDate.getDate() + 7);
             const response = await fetch(`http://localhost:3000/api/books/${book_id}/reserver`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id_user: userID, id_book: book_id }),
+                body: JSON.stringify({ id_user: userID, id_book: book_id, pickup_date: new Date(), return_date: returnDate }),
             });
             const data = await response.json();
             console.log("Book reservation response:", data);

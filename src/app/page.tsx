@@ -47,49 +47,49 @@ export default function Home() {
         </section>
 
         {/* À propos Section */}
-        <section id="a-propos" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8 "> {/* Increased padding-y */}
+        <section id="a-propos" className="bg-gray-200  py-60 mb-8 "> {/* Increased padding-y */}
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">À propos</h1>
-            <p className="text-lg text-gray-800 dark:text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut lectus vitae magna luctus blandit. Nullam pulvinar dui sed interdum sagittis.</p>
+            <h1 className="text-3xl font-bold text-black  mb-4">À propos</h1>
+            <p className="text-lg text-gray-800 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut lectus vitae magna luctus blandit. Nullam pulvinar dui sed interdum sagittis.</p>
           </div>
         </section>
 
         {/* Nos services Section */}
-        <section id="nos-services" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8 ">
+        <section id="nos-services" className="bg-gray-200  py-60 mb-8 ">
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Nos services</h1>
+            <h1 className="text-3xl font-bold text-black  mb-4">Nos services</h1>
             <div className="flex justify-center space-x-8">
               {/* Service Box 1 */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex-1">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Nos Evènements</h2>
-                <p className="text-gray-600 dark:text-gray-300">Nos eveènements seront bientot affichés</p>
+              <div className="bg-white  rounded-lg shadow-lg p-6 flex-1">
+                <h2 className="text-xl font-bold text-gray-800  mb-4">Nos Evènements</h2>
+                <p className="text-gray-600 ">Nos eveènements seront bientot affichés</p>
               </div>
               {/* Service Box 2 */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex-1">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Réeservation Espace</h2>
-                <p className="text-gray-600 dark:text-gray-300">Réservez un espace our une expérience exceptionnelle</p>
+              <div className="bg-white  rounded-lg shadow-lg p-6 flex-1">
+                <h2 className="text-xl font-bold text-gray-800  mb-4">Réeservation Espace</h2>
+                <p className="text-gray-600 ">Réservez un espace our une expérience exceptionnelle</p>
               </div>
               {/* Service Box 3 */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex-1">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Emprunt livre</h2>
-                <p className="text-gray-600 dark:text-gray-300">Veuillez nous rejoindre et empruntez des livre inconditionnellement</p>
+              <div className="bg-white  rounded-lg shadow-lg p-6 flex-1">
+                <h2 className="text-xl font-bold text-gray-800  mb-4">Emprunt livre</h2>
+                <p className="text-gray-600 ">Veuillez nous rejoindre et empruntez des livre inconditionnellement</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Nouveautés Section */}
-        <section id="nouveautes" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8">
+        <section id="nouveautes" className="bg-gray-200  py-60 mb-8">
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Nouveautés</h1>
-            <p className="text-lg text-gray-800 dark:text-gray-300">Nos nouveautés seront affichés ici</p>
+            <h1 className="text-3xl font-bold text-black  mb-4">Nouveautés</h1>
+            <p className="text-lg text-gray-800 ">Nos nouveautés seront affichés ici</p>
           </div>
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8">
+        <section id="contact" className="bg-gray-200  py-60 mb-8">
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Contactez-nous</h1>
+            <h1 className="text-3xl font-bold text-black  mb-4">Contactez-nous</h1>
             <form className="max-w-lg mx-auto">
               <div className="mb-4">
                 <input type="text" placeholder="Nom" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300" />

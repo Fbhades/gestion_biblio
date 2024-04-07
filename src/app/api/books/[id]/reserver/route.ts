@@ -10,10 +10,10 @@ export async function POST(req: NextRequest, context: any) {
         try {
 
             const body = await req.json();
-            const { id_user } = body;
+            const { id_user, pickup_date, return_date } = body;
 
             // Input validation
-            if (!id_book || !id_user) {
+            if (!id_book || !id_user || !pickup_date || !return_date) {
                 return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
             }
             const user = await client.query("Select * from users where id_user =$1; ", [id_user]);
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest, context: any) {
                 return NextResponse.json({ message: "User not found" }, { status: 404 });
             }
             if (user.rows[0].role != "student") {
-                return NextResponse.json({ message: "Only students are allowed to Loan books!" }, { status: 401 });
+                return NextResponse.json({ message: "Only students are allowed to Reserve books!" }, { status: 401 });
             }
 
             const isBookExist = await client.query("Select * from books where id_book =$1; ", [id_book]);
@@ -38,8 +38,8 @@ export async function POST(req: NextRequest, context: any) {
             if (isAlreadyReserved.rows[0].count > 0) {
                 return NextResponse.json({ message: "Book copy already Reserved!" }, { status: 403 });
             }
-            await client.query("update book_copies set status = 'loaned' where id_copy = $1;", [availableCopy.rows[0].id_copy]);
-            await client.query("insert into reservations(user_id,copy_id,reservation_date) values($1,$2,current_timestamp);", [id_user, availableCopy.rows[0].id_copy])
+            await client.query("update book_copies set status = 'reserved' where id_copy = $1;", [availableCopy.rows[0].id_copy]);
+            await client.query("insert into reservations(user_id,copy_id,reservation_date,pickup_date, return_date) values($1,$2,current_timestamp, $3 , $4);", [id_user, availableCopy.rows[0].id_copy, pickup_date, return_date])
             return NextResponse.json({ message: "Book Reserved Successfuly" }, { status: 201 });
         }
         catch (error) {
