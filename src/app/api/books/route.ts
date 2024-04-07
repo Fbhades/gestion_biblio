@@ -54,19 +54,25 @@ export async function POST(req: NextRequest) {
     try {
 
       const body = await req.json();
-      const { label, slug, isbn, description, author, category } = body;
+      const { label, slug, isbn, description, author, category, image, nbrCopies } = body;
 
       // Input validation
-      if (!label || !slug || !isbn || !description || !author || !category) {
+      if (!label || !slug || !isbn || !description || !author || !category || !image || !nbrCopies) {
         return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
       }
 
-      await client.query('INSERT INTO books (label, slug, isbn, description, author, category) VALUES($1,$2,$3,$4,$5,$6); ', [label, slug, isbn, description, author, category]);
+      const result = await client.query('INSERT INTO books (label, slug, isbn, description, author, category, image) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING id_book;', [label, slug, isbn, description, author, category, image]);
+      const bookId = result.rows[0].id_book;
+
+      // Insert copies with status='available'
+      for (let i = 0; i < nbrCopies; i++) {
+        await client.query('INSERT INTO book_copies (book_id, status) VALUES($1, $2);', [bookId, 'available']);
+      }
       return NextResponse.json({ message: "Book added" }, { status: 201 });
     }
     catch (error) {
       console.error('Error fetching data:', error);
-      return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+      return NextResponse.json({ error, message: "Internal server error" }, { status: 500 });
     } finally {
       await client.release();
     }

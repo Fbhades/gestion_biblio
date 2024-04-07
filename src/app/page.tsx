@@ -4,92 +4,92 @@ import { useAuth } from "@clerk/nextjs";
 import { FaSearch } from 'react-icons/fa';
 import { UserButton } from "@clerk/clerk-react";
 import Navbar from "./Ui/Navbar";
-
+import { handleCreateUser } from "@/components/user";
 
 
 export default function Home() {
   //
   const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const handleCreateUser = async () => {
-    try {
-      const { isLoaded, isSignedIn, user } = useUser();
-      console.log(user);
-      const email = user?.emailAddresses[0].toString();
-      const name = user?.fullName?.toString();
-      const response = await fetch('http://localhost:3000/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
-      });
+  // const handleCreateUser = async () => {
+  //   try {
+  //     const { isLoaded, isSignedIn, user } = useUser();
+  //     const email = user?.emailAddresses[0].toString();
+  //     const name = user?.username?.toString();
+  //     const response = await fetch('http://localhost:3000/api/auth', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email, name }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to create user');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to create user');
+  //     }
 
-      const data = await response.json();
-      console.log('User created:', data);
-    } catch (error) {
-      console.error('Error creating user:', error);
-    }
-  };
+  //     const data = await response.json();
+  //     console.log('User created:', data);
+  //   } catch (error) {
+  //     console.error('Error creating user:', error);
+  //   }
+  // };
   if (userId) { handleCreateUser() }
   return (
     <div>
       <Navbar />
 
-      <div className="pt-24">
+      <div className="pt-0">
         {/* acceuil Section */}
         <section id="accueil" style={{
-          backgroundImage: "url('https://www.travelandleisure.com/thmb/iq3jvCzmNJY8KnsfCrj76xoQbu0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/johns-hopkins-university-george-peabody-library-COLLEGELIB0417-e09f301ad9ce42fbb924f269469d59a8.jpg?fbclid=IwAR2FFv7WJNMlCXxEYCVHBcYYMBFl77sltUAdf9MNu1fCJVJh3L1BxdtKhQc')"
+          // backgroundImage: "url('https://www.travelandleisure.com/thmb/iq3jvCzmNJY8KnsfCrj76xoQbu0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/johns-hopkins-university-george-peabody-library-COLLEGELIB0417-e09f301ad9ce42fbb924f269469d59a8.jpg?fbclid=IwAR2FFv7WJNMlCXxEYCVHBcYYMBFl77sltUAdf9MNu1fCJVJh3L1BxdtKhQc')"
+          backgroundImage: "url('bg-image.jpg')"
           , backgroundSize: "cover", backgroundPosition: "center", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center"
         }}>
           <h1 className="text-5xl text-white font-bold mb-8">A place to learn, grow, and explore</h1>
         </section>
 
         {/* À propos Section */}
-        <section id="a-propos" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8 "> {/* Increased padding-y */}
+        <section id="a-propos" className="bg-gray-200  py-60 mb-8 "> {/* Increased padding-y */}
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">À propos</h1>
-            <p className="text-lg text-gray-800 dark:text-gray-300">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut lectus vitae magna luctus blandit. Nullam pulvinar dui sed interdum sagittis.</p>
+            <h1 className="text-3xl font-bold text-black  mb-4">À propos</h1>
+            <p className="text-lg text-gray-800 ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut lectus vitae magna luctus blandit. Nullam pulvinar dui sed interdum sagittis.</p>
           </div>
         </section>
 
         {/* Nos services Section */}
-        <section id="nos-services" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8 ">
+        <section id="nos-services" className="bg-gray-200  py-60 mb-8 ">
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Nos services</h1>
+            <h1 className="text-3xl font-bold text-black  mb-4">Nos services</h1>
             <div className="flex justify-center space-x-8">
               {/* Service Box 1 */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex-1">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Nos Evènements</h2>
-                <p className="text-gray-600 dark:text-gray-300">Nos eveènements seront bientot affichés</p>
+              <div className="bg-white  rounded-lg shadow-lg p-6 flex-1">
+                <h2 className="text-xl font-bold text-gray-800  mb-4">Nos Evènements</h2>
+                <p className="text-gray-600 ">Nos eveènements seront bientot affichés</p>
               </div>
               {/* Service Box 2 */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex-1">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Réeservation Espace</h2>
-                <p className="text-gray-600 dark:text-gray-300">Réservez un espace our une expérience exceptionnelle</p>
+              <div className="bg-white  rounded-lg shadow-lg p-6 flex-1">
+                <h2 className="text-xl font-bold text-gray-800  mb-4">Réeservation Espace</h2>
+                <p className="text-gray-600 ">Réservez un espace our une expérience exceptionnelle</p>
               </div>
               {/* Service Box 3 */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex-1">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Emprunt livre</h2>
-                <p className="text-gray-600 dark:text-gray-300">Veuillez nous rejoindre et empruntez des livre inconditionnellement</p>
+              <div className="bg-white  rounded-lg shadow-lg p-6 flex-1">
+                <h2 className="text-xl font-bold text-gray-800  mb-4">Emprunt livre</h2>
+                <p className="text-gray-600 ">Veuillez nous rejoindre et empruntez des livre inconditionnellement</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Nouveautés Section */}
-        <section id="nouveautes" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8">
+        <section id="nouveautes" className="bg-gray-200  py-60 mb-8">
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Nouveautés</h1>
-            <p className="text-lg text-gray-800 dark:text-gray-300">Nos nouveautés seront affichés ici</p>
+            <h1 className="text-3xl font-bold text-black  mb-4">Nouveautés</h1>
+            <p className="text-lg text-gray-800 ">Nos nouveautés seront affichés ici</p>
           </div>
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="bg-gray-200 dark:bg-gray-700 py-60 mb-8">
+        <section id="contact" className="bg-gray-200  py-60 mb-8">
           <div className="max-w-screen-full mx-auto text-center">
-            <h1 className="text-3xl font-bold text-black dark:text-white mb-4">Contactez-nous</h1>
+            <h1 className="text-3xl font-bold text-black  mb-4">Contactez-nous</h1>
             <form className="max-w-lg mx-auto">
               <div className="mb-4">
                 <input type="text" placeholder="Nom" className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300" />
