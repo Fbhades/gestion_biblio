@@ -23,16 +23,16 @@ export async function POST(req: NextRequest) {
     const client = await pool.connect();
     try {
       const body = await req.json();
-      const { email, first_name, last_name } = body;
+      const { email, firstname, lastname } = body;
       console.log("Adding user:", body);
 
       // Input validation
-      if (!email || !first_name || !last_name) {
+      if (!email || !firstname || !lastname) {
         return NextResponse.json({ body, message: "Missing required fields" }, { status: 400 });
       }
 
       // Corrected table and column names
-      await client.query('INSERT INTO users (email, first_name,last_name, role) VALUES ($1, $2, $3,$4);', [email, first_name, last_name, "admin"]);
+      await client.query('INSERT INTO users (email, first_name,last_name, role) VALUES ($1, $2, $3,$4);', [email, firstname, lastname, "student"]);
       return NextResponse.json({ message: "User added successfully" }, { status: 201 });
     } finally {
       await client.release();
