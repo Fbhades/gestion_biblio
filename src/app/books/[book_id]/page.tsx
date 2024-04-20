@@ -24,6 +24,7 @@ export default function PageDetails() {
     const { user } = useUser();
     const email = user?.emailAddresses[0].toString();
     const [userID, setUserID] = useState(0);
+    const [availableCopies, setAvailableCopies] = useState(0);
     useEffect(() => {
 
         if (book_id) {
@@ -48,7 +49,12 @@ export default function PageDetails() {
             const response = await fetch(`http://localhost:3000/api/books/${book_id}`);
             const data = await response.json();
             console.log("Book data fetched:", data);
+
+            const response2 = await fetch(`http://localhost:3000/api/books/${book_id}/available_copies`);
+            const jsonData = await response2.json();
+            setAvailableCopies(jsonData.available_copies);
             setBook(data);
+
         } catch (error) {
             console.error("Error fetching book data:", error);
         }
@@ -87,9 +93,9 @@ export default function PageDetails() {
             <Navbar />
             {loading ? <Loading /> : (
                 <div className="mt-32 px-4 flex justify-start">
-                    <div className="w-full md:w-1/3 lg:w-1/5">
+                    <div className="w-full md:w-1/3 lg:w-1/5" >
                         {book ? (
-                            <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+                            <div className="bg-white shadow-lg rounded-lg overflow-hidden relative">
                                 <img
                                     src={book.image}
                                     alt={book.label}
@@ -102,6 +108,9 @@ export default function PageDetails() {
                                     <p className="mt-2 max-w-sm text-gray-700">{book.author}</p>
                                     {/* Add other book details as needed */}
                                 </div>
+                                <span className="absolute top-0 right-0 bg-green-500 text-white px-2 py-1 text-xs font-bold rounded-full">
+                                    {availableCopies || 0} available
+                                </span>
                             </div>
                         ) : (
                             <p>Loading...</p>
