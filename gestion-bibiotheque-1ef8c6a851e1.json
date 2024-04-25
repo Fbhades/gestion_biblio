@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "gestion-bibiotheque",
+  "private_key_id": "1ef8c6a851e1474966e119ff56420cdd0e4b6ddb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDVkchEp3Ecx2U5\nyGphcEEdHJFA+TkeGMWzr2F7LcCRrNEGwVDXEKYYwmOto1x1FSPqbqD/TlfQN/xi\nScLrYLH6Llmye1w2ob/qs8jsAj1VLoWv57vEtVdVqQutOIakga4KeQhcGYejaacx\n40WCB1btdcQr2pmYJ2CJiJf2fT510dDoCDOV0IK6qKAY3AY3R1FkCqkLFdq+EaSk\njuxi3/wlbHq3vd8hpQW8pjMjNwl5q9Ce7zPqIQ2h/Cygwvb5scG8pKKL8o6YQHoj\n+UqvltX0F7fVVibj4N5a7eH7eBF1qqeD5VABwTDguxDSGyXdlZW21QzlXKJVsUK6\neqoA+FGRAgMBAAECggEAGj4FCoaRQV+GN9ZBWBgNMDC5RRoP43uuGKOlX0I3xiP4\nNT5zb/xljxJHtud6rg+lxPceBPD78k5cI+RQtU/BiW5rlXZPVjku1f3huOTs42F0\nNNv3zbZt9PfGGF1N52XghvyTQznchFRa99LSJiWVEALnUsTUGFxHokQB+YbZ3MEX\nSu5YQh8VSLe2PnebwyOW2u1qsCkF2loO6N5cDvy31Vbz/7uup6r91F94b8LzrLcl\nAHNVACh9u1Ee30+APMkjRaZ8/hQlCcmJIv7061AUik54dDrbp3Gswxgt0NT8u3CB\n+9UXR5udHtdahJjqUUAStXObUG3IaegL05TAor9SDwKBgQDzEO84682D+dqqtFTV\nyIw/OMSZv6lwdqzcFpf2LUQ5yOFiWp3lPMNE/6cUvXBhr4AcTyaJz653Jd444Gjm\nLHXwmor3TcH7TXWB6Nxp2wUF4ELS5SOeZkO27bj4m6Mb4mpOqWdDyc3aQckwbU7A\nNnn1o2HQdGo+fWOs4CttnrItVwKBgQDg7wqtnzq0dJ1Pds/iwEAeKfjkGZ96627l\nGrY+rKXpSAIqJlGCNDhJFbaK9WFpU9qYgMBItvzFqCKQ+KU7T9C1h8BUOz6rp/Y7\nqBdoYpotokb28OMJBNPlLZt1ZgmFp8T+V3j7969eiGFIsXOgRg5trWeWUjafLNAa\nRStVLMG/VwKBgGM+q96a8TwM3YrLvMPZceIyhJueVUm1OxlWJFAA5ZWOfvBQvZ2m\n9LgMhqUCQIuyQ+XLL5ofcUX28UhZ4Jry1mkaQNl/J1A7rVoQwUZ7hg6DJeXEZ4m6\nibV8VQU1TyEIjo11v9M+581RBRu/1eLHm35/amXZ0rOXMQaaNUE6BdhbAoGBALkb\nXzFEwX3yHedgQnI7fkiUh/PHNlxk1a0LD4GCeUMCdG2VfSxmpw9WJBQ1HYYdcN5h\nzlvI4zoSROgDB49I/tv1LIzk+I0xO00a5rCLvI/jZP0hfeVVKMAIiU/SufFZAJ/D\nAphw28wy9cRp7FqwbH1L39xwKe1SZqvH0oJUw9kfAoGAT3pvbwdpTSrPh0AiZ+UM\nYU5g7TiAZ3apMFmKmK0kki4nC1auntFdIVsziYZ9GL22WeAx7+/Xaq0AKuCDh3AJ\nAoK3WEZGIPG70swIN+BcJylzO15rgy6CPEb0/S28+Z8CqQuZ91WQ9yY4ve4zaTil\ngQAxD8BcYZWtx98s0WHkRno=\n-----END PRIVATE KEY-----\n",
+  "client_email": "service1@gestion-bibiotheque.iam.gserviceaccount.com",
+  "client_id": "110637538605515051275",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/service1%40gestion-bibiotheque.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
