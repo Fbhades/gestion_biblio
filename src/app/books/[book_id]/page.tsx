@@ -80,7 +80,7 @@ export default function PageDetails() {
     };
     const reserveBook = async () => {
         if (!pickupDate || !returnDate) {
-            
+
             return;
         }
         if (pickupDate > returnDate) {
@@ -96,7 +96,7 @@ export default function PageDetails() {
         console.log("Request Data:", requestData);
 
         try {
-           // const returnDate = new Date();
+            // const returnDate = new Date();
             //returnDate.setDate(returnDate.getDate() + 7);
             const response = await fetch(`http://localhost:3000/api/books/${book_id}/reserver`, {
                 method: "POST",
@@ -106,15 +106,15 @@ export default function PageDetails() {
                 body: JSON.stringify(requestData),
             });
             if (response.ok) {
-            const data = await response.json();
-            const { id_book, id_user, loan_date, return_date } = data; 
-            console.log("Book reservation response:", data);
-            toggleCalendar();
-        } else {
-            // Handle the response as needed
-            console.error("Error reserving book:", response);
-            alert("Une erreur s'est produite lors de la réservation du livre.");
-        }
+                alert("Le livre a été réservé avec succès.");
+                toggleCalendar();
+            } else {
+                // Handle the response as needed
+                const data = await response.json();
+
+                console.error("Error reserving book:", response);
+                alert(data.message || "Une erreur s'est produite lors de la réservation du livre.");
+            }
         } catch (error) {
             console.error("Error reserving book:", error);
             // Handle the error as needed
@@ -149,27 +149,27 @@ export default function PageDetails() {
                             <p>Loading...</p>
                         )}
                         <button onClick={() => {
-                            if(showCalendar)reserveBook();
+                            if (showCalendar) reserveBook();
                             toggleCalendar();
                         }} className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
                             Reserver
                         </button>
                         {showCalendar && (
                             <Calendar
-                            onChange={(date) => {
-                                if (Array.isArray(date)) {
-                                    // Si une plage de dates est sélectionnée, utilisez la première date
-                                    setPickupDate(date[0] || new Date());
-                                    setReturnDate(date[1] || new Date());
-                                } else {
-                                    // Sinon, utilisez simplement la date sélectionnée
-                                    setPickupDate(date || new Date());
-                                    setReturnDate(date || new Date());
-                                }
-                            }}
-                            value={[pickupDate, returnDate]}
-                            selectRange={true}
-                        />
+                                onChange={(date) => {
+                                    if (Array.isArray(date)) {
+                                        // Si une plage de dates est sélectionnée, utilisez la première date
+                                        setPickupDate(date[0] || new Date());
+                                        setReturnDate(date[1] || new Date());
+                                    } else {
+                                        // Sinon, utilisez simplement la date sélectionnée
+                                        setPickupDate(date || new Date());
+                                        setReturnDate(date || new Date());
+                                    }
+                                }}
+                                value={[pickupDate, returnDate]}
+                                selectRange={true}
+                            />
                         )}
                     </div>
                     <div className="md:w-1/3 lg:w-3/5">
