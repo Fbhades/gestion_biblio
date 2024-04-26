@@ -4,6 +4,7 @@ import pool from '../../../../../db';
 
 export async function GET(req: NextRequest, context: any) {
     const user_id = context.params.user_id;
+    
     try {
         const client = await pool.connect();
         try {

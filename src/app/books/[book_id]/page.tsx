@@ -4,6 +4,8 @@ import { useParams } from "next/navigation";
 import Navbar from "../../Ui/Navbar";
 import Loading from "@/components/loading"
 import { useUser } from "@clerk/nextjs";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 interface Book {
     label: string;
@@ -25,6 +27,10 @@ export default function PageDetails() {
     const email = user?.emailAddresses[0].toString();
     const [userID, setUserID] = useState(0);
     const [availableCopies, setAvailableCopies] = useState(0);
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [pickupDate, setPickupDate] = useState<Date>(new Date());
+    const [returnDate, setReturnDate] = useState<Date>(new Date());
+    const [submittedReview, setSubmittedReview] = useState("");
     useEffect(() => {
 
         if (book_id) {
@@ -34,9 +40,9 @@ export default function PageDetails() {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:3000/api/auth/${email}`);
             const jsonData = await response.json();
-            console.log(jsonData[0].role);
+            console.log(jsonData[0]?.role);
             console.log(jsonData)
-            setUserID(jsonData[0].id_user);
+            setUserID(jsonData[0]?.id_user);
 
         };
         fetchData();
@@ -66,26 +72,53 @@ export default function PageDetails() {
 
     const submitReview = () => {
         console.log("Review submitted:", review);
+        setSubmittedReview(review);
         setReview("");
     };
-
+    const toggleCalendar = () => {
+        setShowCalendar(!showCalendar);
+    };
     const reserveBook = async () => {
+        if (!pickupDate || !returnDate) {
+            
+            return;
+        }
+        if (pickupDate > returnDate) {
+            alert("La date de retour doit être ultérieure à la date de prise en charge.");
+            return;
+        }
+        const requestData = {
+            id_book: book_id,
+            id_user: userID,
+            pickup_date: pickupDate,
+            return_date: returnDate
+        };
+        console.log("Request Data:", requestData);
+
         try {
-            const returnDate = new Date();
-            returnDate.setDate(returnDate.getDate() + 7);
+           // const returnDate = new Date();
+            //returnDate.setDate(returnDate.getDate() + 7);
             const response = await fetch(`http://localhost:3000/api/books/${book_id}/reserver`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id_user: userID, id_book: book_id, pickup_date: new Date(), return_date: returnDate }),
+                body: JSON.stringify(requestData),
             });
+            if (response.ok) {
             const data = await response.json();
+            const { id_book, id_user, loan_date, return_date } = data; 
             console.log("Book reservation response:", data);
+            toggleCalendar();
+        } else {
             // Handle the response as needed
+            console.error("Error reserving book:", response);
+            alert("Une erreur s'est produite lors de la réservation du livre.");
+        }
         } catch (error) {
             console.error("Error reserving book:", error);
             // Handle the error as needed
+            alert("Une erreur s'est produite lors de la réservation du livre.");
         }
     };
     return (
@@ -115,9 +148,29 @@ export default function PageDetails() {
                         ) : (
                             <p>Loading...</p>
                         )}
-                        <button onClick={() => reserveBook()} className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
+                        <button onClick={() => {
+                            if(showCalendar)reserveBook();
+                            toggleCalendar();
+                        }} className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
                             Reserver
                         </button>
+                        {showCalendar && (
+                            <Calendar
+                            onChange={(date) => {
+                                if (Array.isArray(date)) {
+                                    // Si une plage de dates est sélectionnée, utilisez la première date
+                                    setPickupDate(date[0] || new Date());
+                                    setReturnDate(date[1] || new Date());
+                                } else {
+                                    // Sinon, utilisez simplement la date sélectionnée
+                                    setPickupDate(date || new Date());
+                                    setReturnDate(date || new Date());
+                                }
+                            }}
+                            value={[pickupDate, returnDate]}
+                            selectRange={true}
+                        />
+                        )}
                     </div>
                     <div className="md:w-1/3 lg:w-3/5">
                         <h1 className="text-3xl font-bold text-gray-900 px-4 mt-8">
@@ -141,6 +194,12 @@ export default function PageDetails() {
                                 Publier
                             </button>
                         </div>
+                        {submittedReview && (
+                            <div className="mt-8 px-4">
+                                <h2 className="text-xl font-bold text-gray-900">Votre Avis :</h2>
+                                <p className="text-md text-gray-700 mt-2">{submittedReview}</p>
+                            </div>
+                        )}
                     </div>
                 </div >)
             }
