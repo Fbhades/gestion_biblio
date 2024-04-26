@@ -29,6 +29,9 @@ export default function Navbar() {
             <li>
               <a href="/#contact" className="text-black hover:text-blue-800 ">Contact</a> {/* Black text color, deep blue hover color */}
             </li>
+            <li>
+              <a href="/loans" className="text-black hover:text-blue-800 ">Emprunts</a> {/* Black text color, deep blue hover color */}
+            </li>
           </ul>
         </div>
 

@@ -10,27 +10,28 @@ import { handleCreateUser } from "@/components/user";
 export default function Home() {
   //
   const { isLoaded, userId, sessionId, getToken } = useAuth();
-  // const handleCreateUser = async () => {
-  //   try {
-  //     const { isLoaded, isSignedIn, user } = useUser();
-  //     const email = user?.emailAddresses[0].toString();
-  //     const name = user?.username?.toString();
-  //     const response = await fetch('http://localhost:3000/api/auth', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ email, name }),
-  //     });
+  const handleCreateUser = async () => {
+    try {
+       const { isLoaded, isSignedIn, user } = useUser();
+      const email = user?.emailAddresses[0].toString();
+      const firstname = user?.firstName?.toString();
+      const lastname  = user?.lastName?.toString();
+      const response = await fetch('http://localhost:3000/api/auth', {
+        method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ email, firstname,lastname }),
+       });
 
-  //     if (!response.ok) {
-  //       throw new Error('Failed to create user');
-  //     }
+      if (!response.ok) {
+         throw new Error('Failed to create user');
+       }
 
-  //     const data = await response.json();
-  //     console.log('User created:', data);
-  //   } catch (error) {
-  //     console.error('Error creating user:', error);
-  //   }
-  // };
+       const data = await response.json();
+       console.log('User created:', data);
+     } catch (error) {
+       console.error('Error creating user:', error);
+     }
+   };
   if (userId) { handleCreateUser() }
   return (
     <div>
@@ -141,3 +142,4 @@ export default function Home() {
     </div>
   );
 };
+
