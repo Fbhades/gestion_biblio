@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Book, Category, Sous_Category } from "../Interface";
 import axios from "axios";
+import { json } from "stream/consumers";
 
 export default function Books() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -18,6 +19,7 @@ export default function Books() {
   const [sousCategories, setSousCategories] = useState<Sous_Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number>(-1);
   const [nbrCopies, setNbrCopies] = useState<number>(1);
+  const [file, setFile] = useState<File>();
 
   const fetchBooks = async () => {
     const response = await fetch("http://localhost:3000/api/books");
@@ -51,8 +53,12 @@ export default function Books() {
 
   const addBook = async () => {
     try {
-      const { label, author, isbn, description, category, image } = newBook;
+      const image = await uploadImage();
+
+      const { label, author, isbn, description, category } = newBook;
+      console.log("image in new book: " + image);
       const slug = label.toLowerCase().replace(/\s+/g, "-");
+
 
       const response = await fetch("http://localhost:3000/api/books", {
         method: "POST",
@@ -80,23 +86,59 @@ export default function Books() {
     }
   };
 
-  const handleInputChange = (e:any) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setNewBook({ ...newBook, [name]: value });
   };
 
-  const updateBook = async (id:any, book:any) => {
+  const updateBook = async (id: any, book: any) => {
     await axios.put(`/api/books/${id}`, book);
     //router.push("/admin");
   };
 
-  const deleteBook = async (id:any) => {
+  const deleteBook = async (id: any) => {
     await axios.delete(`/api/books/${id}`);
     setBooks(books.filter((book) => book.id_book !== id));
   };
-    return (
-        <div>
-        <form className="mb-8" onChange={handleInputChange}>
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    setFile(selectedFile);
+  };
+
+  const uploadImage = async () => {
+    if (!file) {
+      console.error('No file selected.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+
+      const response = await fetch('http://localhost:3000/api/upload', {
+        method: 'POST',
+        body: formData,
+
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image.');
+      }
+
+
+      const responseData = await response.json();
+      console.log('Image uploaded successfully:', responseData.link);
+
+      return responseData.link
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
+  return (
+    <div>
+      <form className="mb-8" onChange={handleInputChange}>
         <input
           type="text"
           placeholder="Label"
@@ -105,14 +147,8 @@ export default function Books() {
           required
           value={newBook.label}
         />
-        <input
-          type="text"
-          placeholder="Image URL"
-          className="border border-gray-300 rounded-md px-4 py-2 mb-2"
-          name="image"
-          required
-          value={newBook.image}
-        />
+        <input type="file" name="file" id="fileInput" accept=".png, .jpg, .jpeg" onChange={handleFileChange} />
+
         <input
           type="text"
           placeholder="Author"
@@ -184,7 +220,6 @@ export default function Books() {
           className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
           disabled={
             !newBook.label ||
-            !newBook.image ||
             !newBook.author ||
             !newBook.isbn ||
             !newBook.description ||
@@ -197,7 +232,6 @@ export default function Books() {
           Add Book
         </button>
       </form>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {books.map((book) => (
           <div className="bg-white p-4 shadow-md rounded-md ">
@@ -221,6 +255,6 @@ export default function Books() {
           </div>
         ))}
       </div>
-      </div>
-    )
+    </div>
+  )
 }

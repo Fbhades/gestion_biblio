@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import fs from 'fs';
+import { Readable } from 'stream';
+
 
 const keyFile = 'gestion-bibiotheque-1ef8c6a851e1.json'; // Path to your service account key file
 
@@ -44,39 +46,41 @@ export async function GET(req: NextRequest) {
 }
 
 
-
 export async function POST(req: NextRequest) {
     try {
-        const body = await req.json();
-        const { imageName, imagePath } = body;
 
-        // Input validation
-        if (!imageName || !imagePath) {
-            return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
-        }
+        const formData = await req.formData();
+        const file: any = formData.get('file');
+        const filename: any = formData.get("fileName")
+        console.log("filename : ", filename);
+        const fileBuffer = file.stream();
 
         const folderId = '12asKpL4XRYT9ZGcqIlbWokGWwUw4fdAT'; // Specify the folder ID
 
-        // Example: Upload an image from a local path
         const response = await drive.files.create({
             requestBody: {
-                name: imageName,
+                name: filename,
                 parents: [folderId],
             },
             media: {
-                mimeType: 'image/jpeg',
-                body: fs.createReadStream(imagePath),
+                mimeType: file.type,
+                body: Readable.from(fileBuffer),
             },
         });
 
         // Extract file ID from response
         const fileId = response.data.id;
 
-        // Generate public link for the uploaded image
-        const publicLink = `https://drive.google.com/uc?id=${fileId}`;
+        // Get the file to retrieve the thumbnailLink
+        const fileResponse = drive.files.get({
+            fileId: fileId!,
+            fields: 'thumbnailLink',//webContentLink
+        });
 
-        console.log('Image uploaded to Google Drive:', publicLink);
-        return NextResponse.json({ message: 'Image uploaded to Google Drive!', link: publicLink }, { status: 200 });
+        const thumbnailLink = (await fileResponse).data.thumbnailLink;
+        console.log("thumbnailLink: ", thumbnailLink);
+
+        return NextResponse.json({ message: 'Image uploaded to Google Drive!', link: thumbnailLink }, { status: 200 });
     } catch (error) {
         console.error('Error uploading image:', error);
         return NextResponse.json({ error: 'Image upload failed.' }, { status: 500 });
