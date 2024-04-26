@@ -44,3 +44,11 @@ export interface ReservationAdmin {
   last_name:string;
   user_email:string;
 }
+export interface loans{
+  id_loan:number;
+  user_email:string;
+  book_label:string;
+  loan_date:string;
+  return_date: string;
+  expected_return_date: string;
+}
