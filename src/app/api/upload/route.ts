@@ -71,16 +71,17 @@ export async function POST(req: NextRequest) {
         // Extract file ID from response
         const fileId = response.data.id;
 
-        // Get the file to retrieve the webViewLink
-        const fileResponse = drive.files.get({
-            fileId: fileId!,
-            fields: 'webViewLink',//webContentLink
-        });
+        // Get the file to retrieve the webContentLink
+        // const fileResponse = drive.files.get({
+        //     fileId: fileId!,
+        //     fields: 'webContentLink',//webContentLink
+        // });
 
-        const webViewLink = (await fileResponse).data.webViewLink;
-        console.log("webViewLink: ", webViewLink);
+        // const webContentLink = (await fileResponse).data.webContentLink;
+        // console.log("webContentLink: ", webContentLink);
+        const webContentLink = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
 
-        return NextResponse.json({ message: 'Image uploaded to Google Drive!', link: webViewLink }, { status: 200 });
+        return NextResponse.json({ message: 'Image uploaded to Google Drive!', link: webContentLink }, { status: 200 });
     } catch (error) {
         console.error('Error uploading image:', error);
         return NextResponse.json({ error: 'Image upload failed.' }, { status: 500 });
