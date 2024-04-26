@@ -39,9 +39,9 @@ export default function PageDetails() {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:3000/api/auth/${email}`);
             const jsonData = await response.json();
-            console.log(jsonData[0].role);
+            console.log(jsonData[0]?.role);
             console.log(jsonData)
-            setUserID(jsonData[0].id_user);
+            setUserID(jsonData[0]?.id_user);
 
         };
         fetchData();
@@ -150,12 +150,12 @@ export default function PageDetails() {
                             onChange={(date) => {
                                 if (Array.isArray(date)) {
                                     // Si une plage de dates est sélectionnée, utilisez la première date
-                                    setPickupDate(date[0]);
-                                    setReturnDate(date[1]);
+                                    setPickupDate(date[0] || new Date());
+                                    setReturnDate(date[1] || new Date());
                                 } else {
                                     // Sinon, utilisez simplement la date sélectionnée
-                                    setPickupDate(date);
-                                    setReturnDate(null);
+                                    setPickupDate(date || new Date());
+                                    setReturnDate(date || new Date());
                                 }
                             }}
                             value={[pickupDate, returnDate]}
