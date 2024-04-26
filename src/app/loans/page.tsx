@@ -1,4 +1,3 @@
-// src/app/loan.tsx
 
 import { useState, useEffect } from 'react';
 
@@ -7,17 +6,23 @@ const LoanPage = () => {
   const [current, setCurrent] = useState<any[]>([]);
 
   useEffect(() => {
-    // Récupération de l'historique des emprunts
-    fetch('/api/history/history')
-      .then(res => res.json())
-      .then(data => setHistory(data.history))
-      .catch(error => console.error('Error fetching loan history:', error));
-    
-    // Récupération des emprunts en cours
-    fetch('/api/history/current')
-      .then(res => res.json())
-      .then(data => setCurrent(data.current))
-      .catch(error => console.error('Error fetching current loans:', error));
+    const fetchLoans = async () => {
+      try {
+        // Récupération de l'historique des emprunts
+        const historyResponse = await fetch('/api/loans?type=history');
+        const historyData = await historyResponse.json();
+        setHistory(historyData);
+
+        // Récupération des emprunts en cours
+        const currentResponse = await fetch('/api/loans?type=current');
+        const currentData = await currentResponse.json();
+        setCurrent(currentData);
+      } catch (error) {
+        console.error('Error fetching loans:', error);
+      }
+    };
+
+    fetchLoans();
   }, []);
 
   return (

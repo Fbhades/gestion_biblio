@@ -1,4 +1,3 @@
-// pages/api/loans.ts
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '../../../../db';
