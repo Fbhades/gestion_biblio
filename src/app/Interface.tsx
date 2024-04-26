@@ -25,3 +25,22 @@ export interface Reservation {
     pickup_date: string;
     return_date: string;
 }
+export interface User{
+  id_user : number;
+  first_name : string;
+  last_name :string;
+  role:string;
+  email:string;
+}
+export interface ReservationAdmin {
+  id_reservation: number;
+  user_id: number;
+  copy_id: number;
+  reservation_date: string;
+  pickup_date: string;
+  return_date: string;
+  book_label:string;
+  first_name:string;
+  last_name:string;
+  user_email:string;
+}
