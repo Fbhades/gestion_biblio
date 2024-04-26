@@ -1,8 +1,9 @@
-import { NextResponse, NextRequest } from 'next/server';
+// pages/api/loans.ts
+
+import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '../../../../db';
 
-
-export default async function handler(req:any, res:any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
       // Récupération de l'historique des emprunts
