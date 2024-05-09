@@ -147,7 +147,7 @@ export default function Books() {
           required
           value={newBook.label}
         />
-        <input type="file" name="file" id="fileInput" accept=".png, .jpg, .jpeg" onChange={handleFileChange} />
+        <input type="file" name="file" id="fileInput" accept=".png, .jpg, .jpeg, .webp" onChange={handleFileChange} />
 
         <input
           type="text"
