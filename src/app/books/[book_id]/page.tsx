@@ -1,11 +1,12 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "../../Ui/Navbar";
-import Loading from "@/components/loading"
+import Loading from "@/components/loading";
 import { useUser } from "@clerk/nextjs";
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import { reviews } from "@/app/Interface";
 
 interface Book {
     label: string;
@@ -14,11 +15,7 @@ interface Book {
     description: string;
 }
 
-
-// Rest of the code...
-
 export default function PageDetails() {
-
     const { book_id } = useParams();
     const [book, setBook] = useState(undefined as Book | undefined);
     const [review, setReview] = useState("");
@@ -30,57 +27,102 @@ export default function PageDetails() {
     const [showCalendar, setShowCalendar] = useState(false);
     const [pickupDate, setPickupDate] = useState<Date>(new Date());
     const [returnDate, setReturnDate] = useState<Date>(new Date());
-    const [submittedReview, setSubmittedReview] = useState("");
+    const [submittedReview, setSubmittedReview] = useState<reviews[]>([]);
+    const [rating, setRating] = useState(0);
     useEffect(() => {
-
         if (book_id) {
             fetchBookData();
             setLoading(false);
         }
+    }, [book_id]);
+
+    useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:3000/api/auth/${email}`);
             const jsonData = await response.json();
             console.log(jsonData[0]?.role);
-            console.log(jsonData)
+            console.log(jsonData);
             setUserID(jsonData[0]?.id_user);
-
         };
         fetchData();
+    }, [email]);
+    const fetchDatareviews = async () => {
+        const response = await fetch(
+            `http://localhost:3000/api/reviews/${book_id}`
+        );
+        const jsonData = await response.json();
+        console.log("reviews data recieved", jsonData);
+        setSubmittedReview(jsonData);
+        console.log("reviews", submittedReview)
+    };
+    useEffect(() => {
 
-
-    }, [book_id, email]);
+        fetchDatareviews();
+    }, []);
 
     const fetchBookData = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/api/books/${book_id}`);
+            const response = await fetch(
+                `http://localhost:3000/api/books/${book_id}`
+            );
             const data = await response.json();
             console.log("Book data fetched:", data);
 
-            const response2 = await fetch(`http://localhost:3000/api/books/${book_id}/available_copies`);
+            const response2 = await fetch(
+                `http://localhost:3000/api/books/${book_id}/available_copies`
+            );
             const jsonData = await response2.json();
             setAvailableCopies(jsonData.available_copies);
             setBook(data);
-
         } catch (error) {
             console.error("Error fetching book data:", error);
         }
     };
 
-    const handleReviewChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleReviewChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
         setReview(event.target.value);
     };
 
-    const submitReview = () => {
+    const submitReview = async () => {
         console.log("Review submitted:", review);
-        setSubmittedReview(review);
         setReview("");
+        setRating(0);
+        try {
+            const response = await fetch(`http://localhost:3000/api/reviews`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_id: userID,
+                    book_id: book_id,
+                    rating: rating,
+                    feedback: review,
+                }),
+            });
+            if (response.ok) {
+                alert("Le review est submitted.");
+                fetchDatareviews();
+            } else {
+                const data = await response.json();
+
+                console.error("Error review:", response);
+                alert(
+                    data.message || "Une erreur s'est produite lors de la publier review."
+                );
+            }
+        } catch (error) {
+            console.error("Error reveiwing:", error);
+            alert("Une erreur s'est produite lors de publier review");
+        }
     };
     const toggleCalendar = () => {
         setShowCalendar(!showCalendar);
     };
     const reserveBook = async () => {
         if (!pickupDate || !returnDate) {
-
             return;
         }
         if (pickupDate > returnDate) {
@@ -95,20 +137,23 @@ export default function PageDetails() {
             id_book: book_id,
             id_user: userID,
             pickup_date: pickupDate,
-            return_date: returnDate
+            return_date: returnDate,
         };
         console.log("Request Data:", requestData);
 
         try {
             // const returnDate = new Date();
             //returnDate.setDate(returnDate.getDate() + 7);
-            const response = await fetch(`http://localhost:3000/api/books/${book_id}/reserver`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestData),
-            });
+            const response = await fetch(
+                `http://localhost:3000/api/books/${book_id}/reserver`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestData),
+                }
+            );
             if (response.ok) {
                 setAvailableCopies(prevCopies => prevCopies - 1);
                 alert("Le livre a été réservé avec succès.");
@@ -118,7 +163,10 @@ export default function PageDetails() {
                 const data = await response.json();
 
                 console.error("Error reserving book:", response);
-                alert(data.message || "Une erreur s'est produite lors de la réservation du livre.");
+                alert(
+                    data.message ||
+                    "Une erreur s'est produite lors de la réservation du livre."
+                );
             }
         } catch (error) {
             console.error("Error reserving book:", error);
@@ -126,12 +174,15 @@ export default function PageDetails() {
             alert("Une erreur s'est produite lors de la réservation du livre.");
         }
     };
+
     return (
         <>
             <Navbar />
-            {loading ? <Loading /> : (
+            {loading ? (
+                <Loading />
+            ) : (
                 <div className="mt-32 px-4 flex justify-start">
-                    <div className="w-full md:w-1/3 lg:w-1/5" >
+                    <div className="w-full md:w-1/3 lg:w-1/5">
                         {book ? (
                             <div className="bg-white shadow-lg rounded-lg overflow-hidden relative">
                                 <img
@@ -188,12 +239,26 @@ export default function PageDetails() {
                         </h1>
                         <p className="text-md ml-8 mt-9">{book ? book.description : ""}</p>
                         <div className="w-full mt-0 mr-5 ml-5">
+
                             <textarea
                                 value={review}
                                 onChange={handleReviewChange}
                                 placeholder="Ecrire votre avis..."
                                 className="w-full h-64 p-4 border rounded mt-4"
                             ></textarea>
+                            <div className="flex mb-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <button
+                                        key={i}
+                                        aria-label={`Rate ${i + 1}`}
+                                        onClick={() => setRating(i + 1)}
+                                        className={`w-10 h-10 flex items-center justify-center border rounded-full mr-1 ${rating > i ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                                            }`}
+                                    >
+                                        <span className="text-xl leading-none">{i + 1}</span>
+                                    </button>
+                                ))}
+                            </div>
                             <button
                                 onClick={submitReview}
                                 className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white"
@@ -201,15 +266,44 @@ export default function PageDetails() {
                                 Publier
                             </button>
                         </div>
-                        {submittedReview && (
-                            <div className="mt-8 px-4">
-                                <h2 className="text-xl font-bold text-gray-900">Votre Avis :</h2>
-                                <p className="text-md text-gray-700 mt-2">{submittedReview}</p>
-                            </div>
-                        )}
+                        <div className="mt-8 px-4">
+                            <h2 className="text-xl font-bold text-gray-900">les avis:</h2>
+                            {submittedReview ? (
+                                <div className="p-8">
+                                    {Array.isArray(submittedReview) &&
+                                        submittedReview.map((review) => (
+                                            <div
+                                                className="bg-white shadow-md p-4 rounded-lg mb-4"
+                                                key={review.id_review}
+                                            >
+                                                <h2 className="text-xl font-semibold mb-2">
+                                                    {review.name}
+                                                </h2>
+                                                <p className="text-gray-700">{review.feedback}</p>
+                                                <div className="flex items-center mb-2">
+                                                    {Array.from({ length: 5 }, (_, i) => (
+                                                        <span
+                                                            key={i}
+                                                            className={`text-lg ${i < review.rating
+                                                                ? "text-yellow-400"
+                                                                : "text-gray-300"
+                                                                }`}
+                                                        >
+                                                            &#9733;
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                </div>
+                            ) : (
+                                <p>No reviews yet.</p>
+                            )}
+                        </div>
                     </div>
-                </div >)
-            }
+                </div>
+            )}
+
         </>
     );
 }
