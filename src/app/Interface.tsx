@@ -61,3 +61,10 @@ export interface NormalLoans {
   return_date: string;
   expected_return_date: string;
 }
+export interface Announcement {
+  id_announcement?: number;
+  message: string;
+  publish_date: string;
+  expiry_date: string;
+  admin_id?: number;
+}

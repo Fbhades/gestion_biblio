@@ -6,6 +6,7 @@ import Books from "@/app/admin/books";
 import Reservation from "./reservation";
 import Loans from "./laons"
 import Stats from "./stat";
+import Announcements from "./announcements";
 
 export default function Admin() {
   const router = useRouter();
@@ -57,9 +58,21 @@ export default function Admin() {
       >
         loans
       </button>
-      {currentView === "books" && <Books />}
-      {currentView === "reservations" && <Reservation />}
-      {currentView === "loans" && <Loans />}
+      <button
+        onClick={() => setCurrentView("announcements")}
+        className={`bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mr-2 
+              ${currentView === "announcements" ? "opacity-100" : "opacity-50"} 
+              flex-grow`}
+        disabled={currentView === "announcements"}
+      >
+        Announcements
+      </button>
+      <div className="my-4">
+        {currentView === "books" && <Books />}
+        {currentView === "reservations" && <Reservation />}
+        {currentView === "loans" && <Loans />}
+        {currentView === "announcements" && <Announcements />}
+      </div>
     </div>
   );
 }

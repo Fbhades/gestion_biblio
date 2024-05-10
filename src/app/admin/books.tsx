@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Book, Category, Sous_Category } from "../Interface";
 import axios from "axios";
 import { json } from "stream/consumers";
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 
 export default function Books() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -68,7 +69,8 @@ export default function Books() {
       if (!response.ok) {
         throw new Error("Failed to fetch books after adding.");
       }
-      setBooks([newBook, ...books]);
+      // setBooks([newBook, ...books]);
+      fetchBooks();
       setNewBook({
         id_book: 0,
         label: "",
@@ -81,6 +83,7 @@ export default function Books() {
       });
       setNbrCopies(1);
       setSelectedCategory(-1);
+      Loading.remove();
     } catch (error) {
       console.error("Error adding book:", error);
     }
@@ -115,6 +118,10 @@ export default function Books() {
     formData.append('file', file);
 
     try {
+      Loading.pulse('Uploading image...', {
+        clickToClose: false,
+
+      })
 
       const response = await fetch('http://localhost:3000/api/upload', {
         method: 'POST',
