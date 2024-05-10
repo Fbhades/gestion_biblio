@@ -61,3 +61,11 @@ export interface NormalLoans {
   return_date: string;
   expected_return_date: string;
 }
+export interface reviews{
+  name:string;
+  id_review: number;
+  user_id: number;
+  book_id: number;
+  rating:number;
+  feedback:string;
+}
