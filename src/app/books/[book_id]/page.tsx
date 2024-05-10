@@ -157,10 +157,10 @@ export default function PageDetails() {
                             if (showCalendar) reserveBook();
                             toggleCalendar();
                         }}
-                        disabled={availableCopies <= 0}
-                         className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
+                            disabled={availableCopies <= 0}
+                            className={`mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white ${availableCopies <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>
                             Reserver
-                        </button>  
+                        </button>
                         {showCalendar && (
                             <Calendar
                                 onChange={(date) => {
