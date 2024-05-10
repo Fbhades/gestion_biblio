@@ -87,6 +87,10 @@ export default function PageDetails() {
             alert("La date de retour doit être ultérieure à la date de prise en charge.");
             return;
         }
+        if (availableCopies <= 0) {
+            alert("Désolé, il n'y a plus de copies disponibles pour ce livre.");
+            return;
+        }
         const requestData = {
             id_book: book_id,
             id_user: userID,
@@ -106,6 +110,7 @@ export default function PageDetails() {
                 body: JSON.stringify(requestData),
             });
             if (response.ok) {
+                setAvailableCopies(prevCopies => prevCopies - 1);
                 alert("Le livre a été réservé avec succès.");
                 toggleCalendar();
             } else {
@@ -151,9 +156,11 @@ export default function PageDetails() {
                         <button onClick={() => {
                             if (showCalendar) reserveBook();
                             toggleCalendar();
-                        }} className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
+                        }}
+                        disabled={availableCopies <= 0}
+                         className="mt-4 bg-transparent border border-black text-black py-2 px-10 rounded-full hover:bg-black hover:text-white">
                             Reserver
-                        </button>
+                        </button>  
                         {showCalendar && (
                             <Calendar
                                 onChange={(date) => {
