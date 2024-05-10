@@ -7,8 +7,6 @@ export const GET = async (req: NextRequest) => {
     try {
       const category = req.nextUrl.searchParams.get('category');
       const author = req.nextUrl.searchParams.get('author');
-      // Add more parameters here...
-
       let query = 'SELECT * FROM books WHERE 1=1';
       const values = [];
       let paramIndex = 1; // Start parameter index from 1
