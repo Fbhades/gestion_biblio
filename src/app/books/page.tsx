@@ -21,10 +21,10 @@ export default function Books() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:3000/api/books");
+      const response = await fetch("/api/books");
       const jsonData = await response.json();
       const promises = (jsonData as Book[]).map(async (book) => {
-        const response = await fetch(`http://localhost:3000/api/books/${book.id_book}/available_copies`);
+        const response = await fetch(`/api/books/${book.id_book}/available_copies`);
         const jsonData = await response.json();
         return { id: book.id_book, available_copies: jsonData.available_copies };
       });
@@ -42,7 +42,7 @@ export default function Books() {
   }, []);
   useEffect(() => {
     const fetchCategories = async () => {
-      const response = await fetch(`http://localhost:3000/api/categories`);
+      const response = await fetch(`/api/categories`);
       const categories = await response.json();
       setCategories(categories);
     };
@@ -52,7 +52,7 @@ export default function Books() {
   useEffect(() => {
     const fetchSousCategories = async () => {
       const response = await fetch(
-        `http://localhost:3000/api/categories/${selectedCategory}/sousCategories`
+        `/api/categories/${selectedCategory}/sousCategories`
       );
       const sousCategories = await response.json();
       setSousCategories(sousCategories);

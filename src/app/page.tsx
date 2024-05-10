@@ -16,7 +16,7 @@ export default function Home() {
       const email = user?.emailAddresses[0].toString();
       const firstname = user?.firstName?.toString();
       const lastname  = user?.lastName?.toString();
-      const response = await fetch('http://localhost:3000/api/auth', {
+      const response = await fetch('api/auth', {
         method: 'POST',
        headers: { 'Content-Type': 'application/json' },
        body: JSON.stringify({ email, firstname,lastname }),
