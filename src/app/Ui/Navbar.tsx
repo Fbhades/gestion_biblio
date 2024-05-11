@@ -21,13 +21,13 @@ export default function Navbar() {
               <a href="/#nos-services" className="text-black hover:text-blue-800 ">Nos services</a> {/* Black text color, deep blue hover color */}
             </li>
             <li>
-              <a href="/books" className="text-black hover:text-blue-800 ">Livres</a> {/* Black text color, deep blue hover color */}
-            </li>
-            <li>
               <a href="/#nouveautes" className="text-black hover:text-blue-800 ">Nouveautés</a> {/* Black text color, deep blue hover color */}
             </li>
             <li>
               <a href="/#contact" className="text-black hover:text-blue-800 ">Contact</a> {/* Black text color, deep blue hover color */}
+            </li>
+            <li>
+              <a href="/books" className="text-black hover:text-blue-800 ">Livres</a> {/* Black text color, deep blue hover color */}
             </li>
             <li>
               <a href="/loans" className="text-black hover:text-blue-800 ">Emprunt</a> {/* Black text color, deep blue hover color */}
