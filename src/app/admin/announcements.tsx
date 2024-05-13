@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useUser } from "@clerk/clerk-react";
 import { Block } from 'notiflix/build/notiflix-block-aio';
+import { Notify } from 'notiflix';
 
 export default function Announcements() {
     const [message, setMessage] = useState('');
@@ -31,7 +32,8 @@ export default function Announcements() {
         e.preventDefault();
         // Check if input fields are empty
         if (!message || !expiry_date) {
-            console.error('Message and expiry date are required');
+            Notify.failure('Message and expiry date are required');
+            // console.error('Message and expiry date are required');
             return;
         }
         // Get tomorrow's date
@@ -43,7 +45,8 @@ export default function Announcements() {
 
         // Check if expiry_date is earlier than tomorrow
         if (expiryDateObj < tomorrow) {
-            console.error('Expiry date cannot be earlier than tomorrow');
+            Notify.failure('Expiry date cannot be earlier than tomorrow');
+            // console.error('Expiry date cannot be earlier than tomorrow');
             return;
         }
 
@@ -65,13 +68,15 @@ export default function Announcements() {
             });
 
             if (response.ok) {
-                console.log('Announcement submitted successfully');
+                Notify.success('Announcement submitted successfully');
+                // console.log('Announcement submitted successfully');
                 // Clear the form
                 setMessage('');
                 setExpiryDate('');
                 Block.remove('.create');
             } else {
-                console.error('Error submitting announcement');
+                Notify.failure('Error submitting announcement');
+                // console.error('Error submitting announcement');
             }
         } catch (error) {
             console.error('Error submitting announcement', error);
@@ -124,7 +129,7 @@ export default function Announcements() {
                             <tbody>
                                 {announcements.map((announcement: any) => (
                                     <tr key={announcement.id}>
-                                        <td className="border-b border-gray-200 px-4 py-2">{announcement.message}</td>
+                                        <td className="border-b border-gray-200 px-4 py-2" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '40vw' }}>{announcement.message}</td>
                                         <td className="border-b border-gray-200 px-4 py-2">{new Date(announcement.expiry_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
                                         <td className="border-b border-gray-200 px-4 py-2">{announcement.admin_id}</td>
                                     </tr>

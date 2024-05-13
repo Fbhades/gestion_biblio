@@ -7,6 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { reviews } from "@/app/Interface";
+import { Notify } from "notiflix";
 
 interface Book {
     label: string;
@@ -103,19 +104,22 @@ export default function PageDetails() {
                 }),
             });
             if (response.ok) {
-                alert("Le review est submitted.");
+                Notify.success("The review has been submitted.");
+                // alert("Le review est submitted.");
                 fetchDatareviews();
             } else {
                 const data = await response.json();
 
                 console.error("Error review:", response);
-                alert(
-                    data.message || "Une erreur s'est produite lors de la publier review."
-                );
+                Notify.failure("Une erreur s'est produite lors de publier review.");
+                // alert(
+                //     data.message || "Une erreur s'est produite lors de la publier review."
+                // );
             }
         } catch (error) {
             console.error("Error reveiwing:", error);
-            alert("Une erreur s'est produite lors de publier review");
+            Notify.failure("Une erreur s'est produite lors de publier review.");
+            // alert("Une erreur s'est produite lors de publier review");
         }
     };
     const toggleCalendar = () => {
@@ -126,11 +130,13 @@ export default function PageDetails() {
             return;
         }
         if (pickupDate > returnDate) {
-            alert("La date de retour doit être ultérieure à la date de prise en charge.");
+            Notify.failure("La date de retour doit être ultérieure à la date de prise en charge.");
+            // alert("La date de retour doit être ultérieure à la date de prise en charge.");
             return;
         }
         if (availableCopies <= 0) {
-            alert("Désolé, il n'y a plus de copies disponibles pour ce livre.");
+            Notify.failure("Désolé, il n'y a plus de copies disponibles pour ce livre.");
+            // alert("Désolé, il n'y a plus de copies disponibles pour ce livre.");
             return;
         }
         const requestData = {
@@ -156,7 +162,8 @@ export default function PageDetails() {
             );
             if (response.ok) {
                 setAvailableCopies(prevCopies => prevCopies - 1);
-                alert("Le livre a été réservé avec succès.");
+                Notify.success("Le livre a été réservé avec succès.");
+                // alert("Le livre a été réservé avec succès.");
                 toggleCalendar();
             } else {
                 // Handle the response as needed
@@ -171,7 +178,8 @@ export default function PageDetails() {
         } catch (error) {
             console.error("Error reserving book:", error);
             // Handle the error as needed
-            alert("Une erreur s'est produite lors de la réservation du livre.");
+            Notify.failure("Une erreur s'est produite lors de la réservation du livre.");
+            // alert("Une erreur s'est produite lors de la réservation du livre.");
         }
     };
 

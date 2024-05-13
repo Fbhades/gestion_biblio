@@ -45,9 +45,7 @@ const Page = () => {
                         <p className="text-gray-500">
                             Expiry Date: {formatDate(announcement.expiry_date)}
                         </p>
-                        <span className="inline-block bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded-full mt-2">
-                            Badge
-                        </span>
+
                     </div>
                 ))}
             </div>

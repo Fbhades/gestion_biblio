@@ -5,7 +5,7 @@ import { FaSearch } from 'react-icons/fa';
 import { UserButton } from "@clerk/clerk-react";
 import Navbar from "./Ui/Navbar";
 import { handleCreateUser } from "@/components/user";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 // import { useEffect } from 'react';
 
 
@@ -19,30 +19,33 @@ export default function Home() {
       const { isLoaded, isSignedIn, user } = useUser();
       const email = user?.emailAddresses[0].toString();
       const firstname = user?.firstName?.toString();
-      const lastname  = user?.lastName?.toString();
+      const lastname = user?.lastName?.toString();
       const response = await fetch('http://localhost:3000/api/auth', {
         method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ email, firstname,lastname }),
-       });
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, firstname, lastname }),
+      });
 
       if (!response.ok) {
-         throw new Error('Failed to create user');
-       }
+        throw new Error('Failed to create user');
+      }
 
-       const data = await response.json();
-       console.log('User created:', data);
-     } catch (error) {
-       console.error('Error creating user:', error);
-     }
-   };
+      const data = await response.json();
+      console.log('User created:', data);
+    } catch (error) {
+      console.error('Error creating user:', error);
+    }
+  };
   if (userId) { handleCreateUser() }
 
-  // const router = useRouter();
-  // const handleEmpruntsClick = () => {
-  //   router.push('/loans');
+  const router = useRouter();
+  const handleEmpruntsClick = () => {
+    router.push('/loans');
+  };
+  const handleLivresClick = () => {
+    router.push('/books');
+  };
 
-  
 
   return (
     <div>
@@ -58,19 +61,19 @@ export default function Home() {
           <h1 className="text-5xl text-white font-bold mb-8">A place to learn, grow, and explore</h1>
         </section>
 
-      {/* à propos Section */}
-      <section id="a-propos" className="py-16 bg-gray-200">
-        <div className="container mx-auto px-4 flex justify-center"><br /><br />
-          <div className="max-w-screen-md"><br /><br /><br /><br /><br /><br />
-            <h1 className="text-3xl font-bold text-center text-black mb-4">À propos</h1>
-            <p className="text-lg text-gray-800 text-center">
-              L’Institut supérieur des études technologiques de Radès (arabe : المعاهد العليا للدراسات التكنولوجية برادس) (ISET-Radès) est une institution d'enseignement supérieur tunisienne formant des techniciens supérieurs et délivrant le diplôme de licence appliquée dans plusieurs domaines. <br />
-              Il assure la formation selon la réforme LMD du système de l'enseignement supérieur tunisien au sein des départements suivants : génie mécanique, génie civil, génie électrique, technologies d'informatique et gestion des entreprises et des administrations. <br />
-              L'Iset de Radès est situé dans la banlieue de Radès (gouvernorat de Ben Arous) et abrite aussi la direction générale des études technologiques2.
-            </p>
+        {/* à propos Section */}
+        <section id="a-propos" className="py-16 bg-gray-200">
+          <div className="container mx-auto px-4 flex justify-center"><br /><br />
+            <div className="max-w-screen-md"><br /><br /><br /><br /><br /><br />
+              <h1 className="text-3xl font-bold text-center text-black mb-4">À propos</h1>
+              <p className="text-lg text-gray-800 text-center">
+                L’Institut supérieur des études technologiques de Radès (arabe : المعاهد العليا للدراسات التكنولوجية برادس) (ISET-Radès) est une institution d'enseignement supérieur tunisienne formant des techniciens supérieurs et délivrant le diplôme de licence appliquée dans plusieurs domaines. <br />
+                Il assure la formation selon la réforme LMD du système de l'enseignement supérieur tunisien au sein des départements suivants : génie mécanique, génie civil, génie électrique, technologies d'informatique et gestion des entreprises et des administrations. <br />
+                L'Iset de Radès est situé dans la banlieue de Radès (gouvernorat de Ben Arous) et abrite aussi la direction générale des études technologiques2.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
 
         {/* Nos services Section */}
@@ -86,14 +89,14 @@ export default function Home() {
               </div>
 
               {/* Service Box 2 */}
-              <div className="bg-white rounded-lg shadow-lg p-6 flex-1 flex flex-col items-center justify-center">
+              <div className="bg-white rounded-lg shadow-lg p-6 flex-1 flex flex-col items-center justify-center  " onClick={handleLivresClick} style={{ cursor: "pointer" }}>
                 <img src="books.png" alt="Réservation Livres" className="mb-4" />
                 <h2 className="text-xl font-bold text-gray-800 mb-2">Réservation Livres</h2>
                 <p className="text-gray-600">Réservez des livres et profitez de nouvelles connaissances</p>
               </div>
 
               {/* Service Box 3 */}
-              <div className="bg-white rounded-lg shadow-lg p-6 flex-1 flex flex-col items-center justify-center">
+              <div className="bg-white rounded-lg shadow-lg p-6 flex-1 flex flex-col items-center justify-center" onClick={handleEmpruntsClick} style={{ cursor: "pointer" }}>
                 <img src="loans.png" alt="Vos Emprunts" className="mb-4" />
                 <h2 className="text-xl font-bold text-gray-800 mb-2">Vos Emprunts</h2>
                 <p className="text-gray-600">Suivez vos emprunts</p>
@@ -105,7 +108,7 @@ export default function Home() {
         {/* Nouveautés Section */}
         <section id="nouveautes" className="bg-gray-200 py-8">
           <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold text-center text-black mb-4">Nouveautés</h1>
+            <h1 className="text-3xl font-bold text-center text-black mb-4">Nouveautés</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Première boîte */}
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
